@@ -66,6 +66,14 @@ def RunServer(environ, start_response):
         # print("res:", res)
         print("code:", code)
         return [res.encode("utf-8"), ]
+    if current_url == "/guzhi":
+
+        df = ak.index_value_name_funddb()
+
+        res = df.to_json(orient="records", force_ascii=False)
+        start_response("200 ok", list(headers.items()))
+        # print("res:", res)
+        return [res.encode("utf-8"), ]
     else:
         start_response("404 not found", list(headers.items()))
         return [errStr.encode("utf-8"), ]
@@ -73,7 +81,7 @@ def RunServer(environ, start_response):
 
 if __name__ == "__main__":
     # 8081为HTTP服务监听端口，自行修改
-    httpd = make_server('', 8081, RunServer)
+    httpd = make_server('', 8089, RunServer)
     host, port = httpd.socket.getsockname()
     print('Serving running', host, 'port', port)
     httpd.serve_forever()

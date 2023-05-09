@@ -74,6 +74,14 @@ def RunServer(environ, start_response):
         start_response("200 ok", list(headers.items()))
         # print("res:", res)
         return [res.encode("utf-8"), ]
+    if current_url == "/paihang":
+
+        df = ak.fund_open_fund_rank_em(symbol="全部")
+
+        res = df.to_json(orient="records", force_ascii=False)
+        start_response("200 ok", list(headers.items()))
+        # print("res:", res)
+        return [res.encode("utf-8"), ]
     else:
         start_response("404 not found", list(headers.items()))
         return [errStr.encode("utf-8"), ]

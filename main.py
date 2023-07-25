@@ -108,14 +108,22 @@ def RunServer(environ, start_response):
         # print("res:", res)
         return [res.encode("utf-8"), ]
     if current_url == "/shishi":
-
+        code_info = environ['QUERY_STRING']
+        code = code_info.replace("code=", "")
         df = ak.fund_value_estimation_em(symbol="全部")
 
         res = df.to_json(orient="records", force_ascii=False)
         # s1 = json.loads(res)
+        return_obj = json.dumps({})
+        parsed_array = json.loads(res)
+        for item in parsed_array:
+            if item['基金代码'] == code:
+                return_obj = json.dumps(item)
+                break
+
         start_response("200 ok", list(headers.items()))
         # return [s1["data"].encode("utf-8"), ]
-        return [res.encode("utf-8"), ]
+        return [return_obj.encode("utf-8"), ]
     else:
         print("current_url", current_url)
         start_response("404 not found", list(headers.items()))

@@ -1,5 +1,6 @@
 from wsgiref.simple_server import make_server
 import akshare as ak
+import json
 
 
 connStr = '''
@@ -12,7 +13,7 @@ connStr = '''
 errStr = '''
 { 
 "code" : -1, 
-"msg" : "not support"
+"msg" : "404 not found"
 }
 '''
 
@@ -64,17 +65,17 @@ def RunServer(environ, start_response):
         res = df.to_json(orient="records", force_ascii=False)
         start_response("200 ok", list(headers.items()))
         # print("res:", res)
-        print("code:", code)
+        # print("code:", code)
         return [res.encode("utf-8"), ]
     if current_url == "/guzhi":
-
+        # print("guzhi:", 123)
         df = ak.index_value_name_funddb()
-
+        # print("df:", df)
         res = df.to_json(orient="records", force_ascii=False)
         start_response("200 ok", list(headers.items()))
         # print("res:", res)
         return [res.encode("utf-8"), ]
-    if current_url == "/paihang":
+    if current_url == "/open":
 
         df = ak.fund_open_fund_rank_em(symbol="全部")
 
@@ -82,7 +83,41 @@ def RunServer(environ, start_response):
         start_response("200 ok", list(headers.items()))
         # print("res:", res)
         return [res.encode("utf-8"), ]
+    if current_url == "/changnei":
+
+        df = ak.fund_exchange_rank_em()
+
+        res = df.to_json(orient="records", force_ascii=False)
+        start_response("200 ok", list(headers.items()))
+        # print("res:", res)
+        return [res.encode("utf-8"), ]
+    if current_url == "/huobi":
+
+        df = ak.fund_money_rank_em()
+
+        res = df.to_json(orient="records", force_ascii=False)
+        start_response("200 ok", list(headers.items()))
+        # print("res:", res)
+        return [res.encode("utf-8"), ]
+    if current_url == "/licai":
+
+        df = ak.fund_lcx_rank_em()
+
+        res = df.to_json(orient="records", force_ascii=False)
+        start_response("200 ok", list(headers.items()))
+        # print("res:", res)
+        return [res.encode("utf-8"), ]
+    if current_url == "/shishi":
+
+        df = ak.fund_value_estimation_em(symbol="全部")
+
+        res = df.to_json(orient="records", force_ascii=False)
+        # s1 = json.loads(res)
+        start_response("200 ok", list(headers.items()))
+        # return [s1["data"].encode("utf-8"), ]
+        return [res.encode("utf-8"), ]
     else:
+        print("current_url", current_url)
         start_response("404 not found", list(headers.items()))
         return [errStr.encode("utf-8"), ]
 

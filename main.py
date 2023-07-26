@@ -121,6 +121,16 @@ def RunServer(environ, start_response):
                 return_obj = json.dumps(item)
                 break
 
+        if return_obj == json.dumps({}):
+            df = ak.fund_value_estimation_em(symbol="场内交易基金")
+
+            res = df.to_json(orient="records", force_ascii=False)
+            parsed_array = json.loads(res)
+            for item in parsed_array:
+                if item['基金代码'] == code:
+                    return_obj = json.dumps(item)
+                    break
+
         start_response("200 ok", list(headers.items()))
         # return [s1["data"].encode("utf-8"), ]
         return [return_obj.encode("utf-8"), ]

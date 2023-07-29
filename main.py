@@ -138,7 +138,7 @@ def RunServer(environ, start_response):
         return_obj = json.dumps({})
         parsed_array = json.loads(res)
         code_list = code.split(",")
-        print("code_list", code_list)
+        # print("code_list", code_list)
         code_dict = {}
 
         for item in parsed_array:
@@ -147,7 +147,7 @@ def RunServer(environ, start_response):
                 if len(code_dict) == len(code_list):
                     break
 
-        print(len(code_dict), len(code_list))
+        # print(len(code_dict), len(code_list))
         if len(code_dict) != len(code_list):
             internal = ak.fund_value_estimation_em(symbol="场内交易基金")
             internal_res = internal.to_json(orient="records", force_ascii=False)
@@ -161,8 +161,8 @@ def RunServer(environ, start_response):
         return_list = []
         for value in code_dict.values():
             return_list.append(value)
-        print(code_dict)
-        print(return_list)
+        # print(code_dict)
+        # print(return_list)
 
         start_response("200 ok", list(headers.items()))
         return [json.dumps(return_list).encode("utf-8"), ]

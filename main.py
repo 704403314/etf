@@ -159,8 +159,12 @@ def RunServer(environ, start_response):
                         break
 
         return_list = []
-        for value in code_dict.values():
-            return_list.append(value)
+        
+
+        for v in code_list:
+            for value in code_dict.values():
+                if value['基金代码'] == v:
+                    return_list.append(value)
         # print(code_dict)
         # print(return_list)
 
